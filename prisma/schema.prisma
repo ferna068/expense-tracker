@@ -1,0 +1,48 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+
+  categories Category[]
+  expenses   Expense[]
+}
+
+model Category {
+  id            String    @id @default(cuid())
+  name          String
+  color         String    @default("#6366f1")
+  icon          String    @default("tag")
+  monthlyBudget Float?
+  userId        String
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expenses Expense[]
+
+  @@unique([name, userId])
+}
+
+model Expense {
+  id           String    @id @default(cuid())
+  amount       Float
+  description  String
+  date         DateTime
+  receiptImage String?
+  ocrText      String?
+  userId       String
+  categoryId   String?
+  createdAt    DateTime  @default(now())
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+}
