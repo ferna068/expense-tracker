@@ -2,9 +2,11 @@ import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
+import { createId } from "@paralleldrive/cuid2";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL ?? "",
+  ssl: { rejectUnauthorized: false },
 });
 const prisma = new PrismaClient({ adapter });
 
@@ -20,39 +22,37 @@ const DEFAULT_CATEGORIES = [
 
 async function main() {
   const hashedPassword = await bcrypt.hash("password123", 10);
+  const userId = createId();
 
-  const user = await prisma.user.upsert({
-    where: { email: "demo@example.com" },
-    update: {},
-    create: {
-      email: "demo@example.com",
-      password: hashedPassword,
-      name: "Usuario Demo",
-    },
-  });
+  // Upsert user via raw SQL (avoids transaction requirement)
+  await prisma.$executeRaw`
+    INSERT INTO "User" (id, email, password, name, "createdAt")
+    VALUES (${userId}, 'demo@example.com', ${hashedPassword}, 'Usuario Demo', NOW())
+    ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name
+  `;
 
+  const user = await prisma.user.findUnique({ where: { email: "demo@example.com" } });
+  if (!user) throw new Error("User not found after insert");
+
+  // Delete existing expenses for idempotency
+  await prisma.$executeRaw`DELETE FROM "Expense" WHERE "userId" = ${user.id}`;
+  await prisma.$executeRaw`DELETE FROM "Category" WHERE "userId" = ${user.id}`;
+
+  // Insert categories
   const categories: { id: string; name: string }[] = [];
   for (const cat of DEFAULT_CATEGORIES) {
-    const created = await prisma.category.upsert({
-      where: { name_userId: { name: cat.name, userId: user.id } },
-      update: {},
-      create: {
-        name: cat.name,
-        color: cat.color,
-        icon: cat.icon,
-        monthlyBudget: cat.monthlyBudget,
-        userId: user.id,
-      },
-    });
-    categories.push({ id: created.id, name: created.name });
+    const catId = createId();
+    await prisma.$executeRaw`
+      INSERT INTO "Category" (id, name, color, icon, "monthlyBudget", "userId")
+      VALUES (${catId}, ${cat.name}, ${cat.color}, ${cat.icon}, ${cat.monthlyBudget}, ${user.id})
+    `;
+    categories.push({ id: catId, name: cat.name });
   }
 
   const findCat = (name: string) => categories.find((c) => c.name === name)!;
 
   const now = new Date();
   const daysAgo = (d: number) => new Date(now.getTime() - d * 86400000);
-
-  await prisma.expense.deleteMany({ where: { userId: user.id } });
 
   const sampleExpenses = [
     { amount: 85.5, description: "Supermercado Carrefour", date: daysAgo(2), categoryId: findCat("Alimentación").id },
@@ -68,7 +68,11 @@ async function main() {
   ];
 
   for (const expense of sampleExpenses) {
-    await prisma.expense.create({ data: { ...expense, userId: user.id } });
+    const expId = createId();
+    await prisma.$executeRaw`
+      INSERT INTO "Expense" (id, amount, description, date, "userId", "categoryId", "createdAt")
+      VALUES (${expId}, ${expense.amount}, ${expense.description}, ${expense.date}, ${user.id}, ${expense.categoryId}, NOW())
+    `;
   }
 
   console.log("✅ Seed completado");
