@@ -45,7 +45,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-950 px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-2">
@@ -103,9 +103,9 @@ export default function RegisterPage() {
               </Button>
             </form>
           </Form>
-          <div className="mt-4 text-center text-sm text-gray-600">
+          <div className="mt-4 text-center text-sm text-gray-600 dark:text-slate-400">
             ¿Ya tienes cuenta?{" "}
-            <Link href="/auth/login" className="text-indigo-600 hover:underline font-medium">
+            <Link href="/auth/login" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
               Inicia sesión
             </Link>
           </div>

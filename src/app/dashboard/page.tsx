@@ -93,8 +93,8 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Dashboard</h1>
+          <p className="text-gray-500 dark:text-slate-400 text-sm mt-1">
             {format(now, "MMMM yyyy", { locale: es })}
           </p>
         </div>
@@ -110,16 +110,16 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
               <CreditCard className="h-4 w-4" />
               Gasto este mes
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-gray-900">
+            <p className="text-3xl font-bold text-gray-900 dark:text-slate-100">
               €{totalMonthly.toFixed(2)}
             </p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
               {monthlyExpenses._count} transacciones
             </p>
           </CardContent>
@@ -127,13 +127,13 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Presupuesto total
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-gray-900">
+            <p className="text-3xl font-bold text-gray-900 dark:text-slate-100">
               €{totalBudget.toFixed(2)}
             </p>
             {totalBudget > 0 && (
@@ -142,7 +142,7 @@ export default async function DashboardPage() {
                   value={Math.min((totalMonthly / totalBudget) * 100, 100)}
                   className="h-2"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
                   {Math.round((totalMonthly / totalBudget) * 100)}% utilizado
                 </p>
               </div>
@@ -152,14 +152,14 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
               <AlertTriangle className="h-4 w-4" />
               Alertas de presupuesto
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-gray-900">{alertCount}</p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-3xl font-bold text-gray-900 dark:text-slate-100">{alertCount}</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">
               {alertCount === 0
                 ? "Todo en orden"
                 : `${alertCount} categoría${alertCount > 1 ? "s" : ""} con alerta`}
@@ -197,10 +197,10 @@ export default async function DashboardPage() {
                       className="w-2.5 h-2.5 rounded-full"
                       style={{ backgroundColor: b.color }}
                     />
-                    <span className="font-medium text-gray-700">{b.categoryName}</span>
+                    <span className="font-medium text-gray-700 dark:text-slate-300">{b.categoryName}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-500">
+                    <span className="text-gray-500 dark:text-slate-400">
                       €{b.spent.toFixed(2)} / €{b.monthlyBudget.toFixed(2)}
                     </span>
                     {b.status !== "ok" && (
@@ -251,7 +251,7 @@ export default async function DashboardPage() {
                 <Link
                   key={expense.id}
                   href={`/expenses/${expense.id}`}
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div
@@ -261,16 +261,16 @@ export default async function DashboardPage() {
                       {expense.description.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-gray-900 dark:text-slate-100">
                         {expense.description}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-slate-400">
                         {expense.category?.name ?? "Sin categoría"} ·{" "}
                         {format(new Date(expense.date), "d MMM", { locale: es })}
                       </p>
                     </div>
                   </div>
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold text-gray-900 dark:text-slate-100">
                     €{expense.amount.toFixed(2)}
                   </span>
                 </Link>

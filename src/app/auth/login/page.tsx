@@ -44,7 +44,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-950 px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-2">
@@ -95,13 +95,13 @@ export default function LoginPage() {
               </Button>
             </form>
           </Form>
-          <div className="mt-4 text-center text-sm text-gray-600">
+          <div className="mt-4 text-center text-sm text-gray-600 dark:text-slate-400">
             ¿No tienes cuenta?{" "}
-            <Link href="/auth/register" className="text-indigo-600 hover:underline font-medium">
+            <Link href="/auth/register" className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">
               Regístrate
             </Link>
           </div>
-          <div className="mt-3 p-3 bg-gray-100 rounded-lg text-xs text-gray-500 text-center">
+          <div className="mt-3 p-3 bg-gray-100 dark:bg-slate-800 rounded-lg text-xs text-gray-500 dark:text-slate-400 text-center">
             Demo: demo@example.com / password123
           </div>
         </CardContent>

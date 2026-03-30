@@ -80,8 +80,8 @@ export default function ReceiptUpload({ onResult }: Props) {
         className={cn(
           "border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer",
           isDragging
-            ? "border-indigo-500 bg-indigo-50"
-            : "border-gray-300 hover:border-indigo-400 hover:bg-gray-50"
+            ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-950"
+            : "border-gray-300 dark:border-slate-600 hover:border-indigo-400 hover:bg-gray-50 dark:hover:bg-slate-800"
         )}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
@@ -98,19 +98,19 @@ export default function ReceiptUpload({ onResult }: Props) {
         {isProcessing ? (
           <div className="flex flex-col items-center gap-3">
             <Loader2 className="h-10 w-10 text-indigo-500 animate-spin" />
-            <p className="text-sm text-gray-600">Reconociendo texto del ticket...</p>
-            <p className="text-xs text-gray-400">Esto puede tardar unos segundos</p>
+            <p className="text-sm text-gray-600 dark:text-slate-300">Reconociendo texto del ticket...</p>
+            <p className="text-xs text-gray-400 dark:text-slate-500">Esto puede tardar unos segundos</p>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3">
-            <div className="bg-indigo-100 p-4 rounded-full">
+            <div className="bg-indigo-100 dark:bg-indigo-900 p-4 rounded-full">
               <ScanLine className="h-8 w-8 text-indigo-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-700">Arrastra tu ticket aquí</p>
-              <p className="text-sm text-gray-500 mt-1">o haz clic para seleccionar</p>
+              <p className="font-medium text-gray-700 dark:text-slate-200">Arrastra tu ticket aquí</p>
+              <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">o haz clic para seleccionar</p>
             </div>
-            <p className="text-xs text-gray-400">PNG, JPG, WEBP hasta 5MB</p>
+            <p className="text-xs text-gray-400 dark:text-slate-500">PNG, JPG, WEBP hasta 5MB</p>
           </div>
         )}
       </div>
@@ -138,7 +138,7 @@ export default function ReceiptUpload({ onResult }: Props) {
 
       <div className="flex items-center gap-2">
         <Upload className="h-4 w-4 text-gray-400" />
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-gray-500 dark:text-slate-400">
           El OCR extraerá automáticamente el monto, fecha y comercio del ticket
         </p>
       </div>

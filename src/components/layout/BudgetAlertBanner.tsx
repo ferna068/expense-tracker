@@ -30,15 +30,15 @@ export default function BudgetAlertBanner({ alerts }: Props) {
           key={alert.categoryName}
           className={
             alert.status === "exceeded"
-              ? "border-red-300 bg-red-50"
-              : "border-yellow-300 bg-yellow-50"
+              ? "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950"
+              : "border-yellow-300 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950"
           }
         >
           <AlertTriangle
             className={`h-4 w-4 ${alert.status === "exceeded" ? "text-red-600" : "text-yellow-600"}`}
           />
           <AlertDescription className="flex items-center justify-between">
-            <span className={alert.status === "exceeded" ? "text-red-800" : "text-yellow-800"}>
+            <span className={alert.status === "exceeded" ? "text-red-800 dark:text-red-300" : "text-yellow-800 dark:text-yellow-300"}>
               {alert.status === "exceeded"
                 ? `¡Has superado el presupuesto de ${alert.categoryName}! (${Math.round(alert.percentage)}%)`
                 : `Te estás acercando al límite de ${alert.categoryName} (${Math.round(alert.percentage)}%)`}
